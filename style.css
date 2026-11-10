@@ -329,8 +329,3 @@ body {
     background-color: #4CAF50;
     color: #ffffff;
 }
-
-.server-version span {
-    color: #4CAF50; /* Зелёный акцент для самой версии */
-    font-weight: bold;
-}
