@@ -21,7 +21,6 @@ body {
     line-height: 1.6;
 }
 
-/* --- Шапка сайта --- */
 .header {
     display: flex;
     justify-content: space-between;
@@ -291,6 +290,12 @@ body {
     border: 1px solid #3a3a42;
     font-size: 14px;
     color: #cccccc;
+}
+
+.server-version span {
+    color: #4CAF50; /* Зелёный акцент для самой версии */
+    font-weight: bold;
+}
 }
 /* --- Оформление ссылок в навигации в виде красивых кнопок --- */
 .nav {
