@@ -1,0 +1,299 @@
+/* --- Сброс стандартных отступов и базовые настройки --- */
+/* Подключаем майнкрафтовский шрифт */
+@font-face {
+    font-family: 'Minecraft';
+    src: url('Minecraft.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+/* --- Сброс стандартных отступов и подключение шрифта Майнкрафта --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Minecraft', monospace; /* Установили пиксельный шрифт по умолчанию */
+    image-rendering: pixelated; /* Делает пиксели резкими и чёткими */
+}
+
+body {
+    background-color: #121214;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+/* --- Шапка сайта --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: #1a1a1e;
+    border-bottom: 2px solid #2a2a30;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #4CAF50; /* Зеленый акцент в стиле Minecraft */
+}
+
+.nav a {
+    color: #cccccc;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav a:hover {
+    color: #ffffff;
+}
+
+/* Кнопка "Донат" в меню */
+.nav .btn-donate {
+    background-color: #4CAF50;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+.nav .btn-donate:hover {
+    background-color: #45a049;
+}
+
+/* --- Главный баннер --- */
+/* --- Главный баннер с фоновой картинкой --- */
+.hero {
+    text-align: center;
+    padding: 120px 20px;
+    
+    /* Подключаем фоновую картинку и накладываем тёмный затемняющий слой */
+    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('bg.png');
+    
+    /* Настройки отображения фона */
+    background-size: cover;       /* Картинка растягивается на весь блок */
+    background-position: center;  /* Картинка центрируется */
+    background-repeat: no-repeat; /* Картинка не повторяется */
+    
+    border-bottom: 2px solid #2a2a30;
+}
+
+.hero-title {
+    font-size: 42px;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.hero-subtitle {
+    font-size: 18px;
+    color: #aaaaaa;
+    margin-bottom: 30px;
+}
+
+/* Блок IP */
+.ip-box {
+    display: inline-flex;
+    align-items: center;
+    background-color: #26262c;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #3a3a42;
+}
+
+.ip-text {
+    font-size: 18px;
+    margin-right: 15px;
+}
+
+.ip-text strong {
+    color: #4CAF50;
+}
+
+.btn-copy {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-copy:hover {
+    background-color: #45a049;
+}
+
+/* --- Карточки преимуществ --- */
+.features {
+    padding: 80px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.features h2 {
+    font-size: 32px;
+    margin-bottom: 40px;
+}
+
+.cards-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: #1a1a1e;
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+    border: 1px solid #2a2a30;
+    text-align: left;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #4CAF50;
+}
+
+.card p {
+    color: #aaaaaa;
+    font-size: 14px;
+}
+
+/* --- Подвал --- */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #101012;
+    color: #666666;
+    font-size: 14px;
+    border-top: 1px solid #1a1a1e;
+}
+/* Делаем ссылки с классом green зелёными */
+.nav a.green {
+    color: #14ff24; /* Фирменный зелёный цвет Minecraft */
+}
+
+/* Эффект при наведении мышки на эту зелёную ссылку */
+.nav a.green:hover {
+    color: #45a049; /* Чуть более темный зелёный при наведении */
+}
+/* --- Стили для страницы модов --- */
+.mods-section {
+    padding: 60px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.mods-title {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.mods-subtitle {
+    color: #aaaaaa;
+    margin-bottom: 40px;
+}
+
+/* Кнопка "Скачать всё" */
+.download-all-box {
+    margin-bottom: 40px;
+}
+
+.btn-download-all {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: #ffffff;
+    padding: 14px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #45a049;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.btn-download-all:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+/* Список модов */
+.mods-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+}
+
+.mod-item {
+    background-color: #1a1a1e;
+    padding: 20px 25px;
+    border-radius: 10px;
+    border: 1px solid #2a2a30;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.2s;
+}
+
+.mod-item:hover {
+    border-color: #4CAF50;
+}
+
+.mod-info h3 {
+    color: #4CAF50;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.mod-info p {
+    color: #aaaaaa;
+    font-size: 14px;
+}
+
+/* Кнопка "Скачать" возле каждого мода */
+.btn-download {
+    background-color: transparent;
+    color: #4CAF50;
+    border: 2px solid #4CAF50;
+    padding: 8px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-download:hover {
+    background-color: #4CAF50;
+    color: #ffffff;
+}
+/* --- Стили для версии игры в шапке --- */
+.server-version {
+    background-color: #26262c;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid #3a3a42;
+    font-size: 14px;
+    color: #cccccc;
+}
+
+.server-version span {
+    color: #4CAF50; /* Зелёный акцент для самой версии */
+    font-weight: bold;
+}

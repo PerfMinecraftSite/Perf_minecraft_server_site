@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perf Stream Server</title>
+    <!-- Подключаем наш CSS файл -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Шапка сайта (меню) -->
+    <header class="header">
+        <div class="logo">Perf<span>.Server</span></div>
+        
+        <!-- Добавили версию игры -->
+        <div class="server-version">Версия майнкрафта на сервере:  <span>26.3 neoforge</span></div>
+
+        <nav class="nav">
+            <a href="#">Главная</a>
+            <a href="mods.html" class="green">Моды</a>
+        </nav>
+    </header>
+
+    <!-- Главный баннер (Hero section) -->
+    <section class="hero">
+        <h1 class="hero-title">Добро пожаловать на наш сервер!</h1>
+        <p class="hero-subtitle">Выживание, уникальные ивенты и ламповое комьюнити.</p>
+        
+        <!-- Блок с IP адресом -->
+        <!-- Блок с IP адресом -->
+        <div class="ip-box">
+            <span class="ip-text">IP: <strong id="ipText">213.152.43.73:25671</strong></span>
+            <button class="btn-copy" onclick="copyIP()">Копировать IP</button>
+        </div>
+    </section>
+
+    <!-- Блок "Почему именно мы" -->
+    <section id="features" class="features">
+        
+        <div class="cards-container">
+            <div class="card">
+                <h3>⚡Лучшие игроки</h3>
+                <p>Добрые (не всегда) игроки с которыми приятно общаться.</p>
+            </div>
+
+            <div class="card">
+                <h3>🛡️RolePlay игра присутствует</h3>
+                <p>RP есть( но не всегда ). Множество ролей не дадут тебе скучать.</p>
+            </div>
+
+            <div class="card">
+                <h3>⚔️ Придумайте сами</h3>
+                <p>Я уже устал писать этот бред.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Подвал сайта -->
+    <footer class="footer">
+        <p>©ы.</p>
+    </footer>
+<!-- Скрипт для копирования IP -->
+    <script>
+        function copyIP() {
+            // Находим текст с IP адресом
+            const ipText = document.getElementById("ipText").innerText;
+            
+            // Копируем его в буфер обмена
+            navigator.clipboard.writeText(ipText).then(() => {
+                // Находим саму кнопку
+                const btn = document.querySelector(".btn-copy");
+                
+                // Меняем текст кнопки на время
+                btn.innerText = "Скопировано!";
+                btn.style.backgroundColor = "#45a049";
+                
+                // Через 2 секунды возвращаем прежний текст
+                setTimeout(() => {
+                    btn.innerText = "Копировать IP";
+                    btn.style.backgroundColor = "#4CAF50";
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
