@@ -292,6 +292,43 @@ body {
     font-size: 14px;
     color: #cccccc;
 }
+/* --- Оформление ссылок в навигации в виде красивых кнопок --- */
+.nav {
+    display: flex;
+    gap: 10px; /* Расстояние между кнопками в меню */
+    align-items: center;
+}
+
+.nav a {
+    background-color: #26262c; /* Тёмный фон кнопки */
+    color: #cccccc;            /* Цвет текста */
+    padding: 8px 16px;         /* Внутренние отступы */
+    border-radius: 6px;        /* Скругленные углы */
+    border: 1px solid #3a3a42; /* Тонкая рамка */
+    text-decoration: none;     /* Убираем подчеркивание */
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease; /* Плавная анимация при наведении */
+}
+
+/* Эффект при наведении мышки на любую кнопку в меню */
+.nav a:hover {
+    background-color: #32323c;
+    border-color: #4CAF50;     /* Рамка подсвечивается зелёным */
+    color: #ffffff;
+}
+
+/* Если у ссылки есть класс green (например, активная вкладка "Моды") */
+.nav a.green {
+    background-color: rgba(76, 175, 80, 0.15); /* Полупрозрачный зелёный фон */
+    border-color: #4CAF50;                      /* Зелёная рамка */
+    color: #4CAF50;                             /* Зелёный текст */
+}
+
+.nav a.green:hover {
+    background-color: #4CAF50;
+    color: #ffffff;
+}
 
 .server-version span {
     color: #4CAF50; /* Зелёный акцент для самой версии */
