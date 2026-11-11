@@ -503,7 +503,7 @@ body.archive-page {
 .archive-media-container {
     display: flex;
     flex-direction: column;
-    width: 280px; /* Компактная ширина слева, как на первой схеме */
+    width: 680px; /* Компактная ширина слева, как на первой схеме */
     max-width: 100%;
     flex-shrink: 0;
     background-color: #151518;
@@ -518,7 +518,7 @@ body.archive-page {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* 2 колонки */
     gap: 10px;
-    width: 480px; /* Чуть шире, чтобы поместилось 2 элемента в ряд */
+    width: 680px; /* Чуть шире, чтобы поместилось 2 элемента в ряд */
     align-content: center;
 }
 
