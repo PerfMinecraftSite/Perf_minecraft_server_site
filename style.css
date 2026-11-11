@@ -426,17 +426,6 @@ body.archive-page {
 }
 
 
-/* --- Уникальный фон для страницы Архив --- */
-body.archive-page {
-    background-color: #121216;
-    background-image: 
-        linear-gradient(to bottom, rgba(18, 18, 22, 0.85), rgba(18, 18, 22, 0.4) 30%, rgba(18, 18, 22, 0.4) 70%, rgba(18, 18, 22, 0.9)),
-        url('bg.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-}
-
 /* --- Стили для раздела Архив --- */
 .archive-section {
     padding: 60px 20px;
