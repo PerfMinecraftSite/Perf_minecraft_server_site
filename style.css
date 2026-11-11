@@ -525,7 +525,7 @@ body.archive-page {
 /* Обычная карточка фото */
 .archive-media-thumb {
     width: 100%;
-    height: 140px; /* Аккуратный компактный размер */
+    height: 170px; /* Аккуратный компактный размер */
     object-fit: cover;
     border-radius: 8px;
     border: 2px solid #3a3a42;
