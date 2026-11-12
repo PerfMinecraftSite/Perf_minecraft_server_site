@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perf Stream Server</title>
-    <!-- Подключаем наш CSS файл -->
+    <link rel="icon" type="image/png" href="gg.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,10 +12,7 @@
     <!-- Шапка сайта (меню) -->
     <header class="header">
         <div class="logo">Perf<span>.Server</span></div>
-        
-        <!-- Добавили версию игры -->
-        <div class="server-version">Версия майнкрафта на сервере:  <span>26.3 neoforge</span></div>
-
+        <div class="server-version">Версия майнкрафта на сервере: <span>26.3 neoforge</span></div>
         <nav class="nav">
             <a href="index.html" class="green">Главная</a>
             <a href="archive.html">Архив</a>
@@ -30,30 +27,20 @@
         <p class="hero-subtitle">Выживание, уникальные ивенты и ламповое комьюнити.</p>
         
         <!-- Блок с IP адресом -->
-        <!-- Блок с IP адресом -->
         <div class="ip-box">
             <span class="ip-text">IP: <strong id="ipText">213.152.43.73:25671</strong></span>
             <button class="btn-copy" onclick="copyIP()">Копировать IP</button>
         </div>
     </section>
 
-    <!-- Блок "Почему именно мы" -->
-    <section id="features" class="features">
-        
+    <!-- Секция с разработкой сайта (широкий баннер) -->
+    <section class="features">
         <div class="cards-container">
-            <div class="card">
-                <h3>⚡Лучшие игроки</h3>
-                <p>Добрые (не всегда) игроки с которыми приятно общаться.</p>
-            </div>
-
-            <div class="card">
-                <h3>🛡️RolePlay игра присутствует</h3>
-                <p>RP есть( но не всегда ). Множество ролей не дадут тебе скучать.</p>
-            </div>
-
-            <div class="card">
-                <h3>⚔️ Придумайте сами</h3>
-                <p>Я уже устал писать этот бред.</p>
+            <div class="dev-banner-card" onclick="openDevModal()">
+                <div class="dev-banner-content">
+                    <h3>🛠 Сайт находится в разработке</h3>
+                    <p>Есть идеи, что добавить на сайт или сервер? Нажми сюда, чтобы предложить свою фишку!</p>
+                </div>
             </div>
         </div>
     </section>
@@ -62,38 +49,270 @@
     <footer class="footer">
         <p>©ы.</p>
     </footer>
-<!-- Скрипт для копирования IP -->
-    <script>
-        function copyIP() {
-            // Находим текст с IP адресом
-            const ipText = document.getElementById("ipText").innerText;
+
+    <!-- Модальное окно для предложений -->
+    <div id="devModal" class="dev-modal" onclick="closeDevModalOnOutside(event)">
+        <div class="dev-modal-content">
+            <span class="dev-close" onclick="closeDevModal()">&times;</span>
+            <h2 id="modal-title">💬 Идеи для сайта и сервера</h2>
             
-            // Копируем его в буфер обмена
-            navigator.clipboard.writeText(ipText).then(() => {
-                // Находим саму кнопку
-                const btn = document.querySelector(".btn-copy");
+            <!-- Обычная форма для отправки идей -->
+            <div id="idea-form-box">
+                <p class="dev-modal-sub">Напиши свой ник, предложение и при желании прикрепи скриншот!</p>
+                <input type="text" id="userName" placeholder="Твой ник в игре" class="dev-input">
+                <textarea id="userIdea" placeholder="Опиши свою идею или предложение..." class="dev-textarea"></textarea>
                 
-                // Меняем текст кнопки на время
+                <!-- Красивая кнопка выбора файла -->
+                <label class="dev-file-upload-btn">
+                    <span>📷 Выбрать скриншот</span>
+                    <input type="file" id="userPhoto" accept="image/*" class="dev-file-input" onchange="updateFileName()">
+                </label>
+                <div id="fileNameDisplay" class="dev-file-name"></div>
+
+                <!-- Кнопка отправки -->
+                <button onclick="submitIdea()" class="dev-submit-btn">Отправить идею</button>
+            </div>
+
+            <!-- Секретный блок для администратора -->
+            <div id="admin-panel-box" style="display: none;">
+                <p class="dev-modal-sub" style="color: #4CAF50;">🔐 Панель администратора: список всех идей</p>
+                <div id="ideas-list" class="ideas-list-container"></div>
+                <button onclick="askClearIdeas()" class="dev-clear-btn">Очистить все идеи</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кастомное окно подтверждения (вместо уродливого confirm) -->
+    <div id="customConfirmModal" class="dev-modal" style="z-index: 3500;">
+        <div class="dev-modal-content" style="max-width: 380px; text-align: center;">
+            <h3 style="color: #ffffff; margin-bottom: 12px; font-size: 18px;">⚠️ Подтверждение</h3>
+            <p style="color: #cccccc; font-size: 14px; margin-bottom: 20px;">Точно удалить все сохраненные идеи?</p>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="confirmClearIdeas()" class="dev-clear-btn" style="flex: 1;">Да, удалить</button>
+                <button onclick="closeConfirmModal()" class="dev-submit-btn" style="flex: 1; background-color: #3a3a42;">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кастомное всплывающее уведомление (тост) -->
+    <div id="customToast" class="custom-toast"></div>
+
+    <!-- Модальное окно для просмотра картинки на весь экран -->
+    <div id="imageModal" class="img-fullscreen-modal" onclick="closeImageModal()">
+        <span class="img-fullscreen-close">&times;</span>
+        <img id="fullscreenImage" class="img-fullscreen-content">
+    </div>
+
+    <!-- Скрипты сайта -->
+    <script>
+        // Копирование IP
+        function copyIP() {
+            const ipText = document.getElementById("ipText").innerText;
+            navigator.clipboard.writeText(ipText).then(() => {
+                const btn = document.querySelector(".btn-copy");
                 btn.innerText = "Скопировано!";
                 btn.style.backgroundColor = "#45a049";
-                
-                // Через 2 секунды возвращаем прежний текст
+                showToast("📋 IP сервера скопирован в буфер обмена!");
                 setTimeout(() => {
                     btn.innerText = "Копировать IP";
                     btn.style.backgroundColor = "#4CAF50";
                 }, 2000);
             });
         }
-    </script>
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perf Stream Server</title>
-    
-    <!-- Иконка сайта -->
-    <link rel="icon" type="image/png" href="gg.png">
 
-    <link rel="stylesheet" href="style.css">
-</head>
+        // Красивые всплывающие уведомления (тосты)
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('customToast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Открытие картинки на весь экран
+        function openFullscreenImage(src) {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('fullscreenImage');
+            img.src = src;
+            modal.classList.add('active');
+        }
+
+        // Закрытие полноэкранной картинки
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        // Открытие модального окна
+        function openDevModal() {
+            document.getElementById('devModal').classList.add('active');
+            document.getElementById('idea-form-box').style.display = 'block';
+            document.getElementById('admin-panel-box').style.display = 'none';
+            document.getElementById('userName').value = '';
+            document.getElementById('userIdea').value = '';
+            document.getElementById('userPhoto').value = '';
+            document.getElementById('fileNameDisplay').textContent = '';
+        }
+
+        // Закрытие модального окна
+        function closeDevModal() {
+            document.getElementById('devModal').classList.remove('active');
+        }
+
+        // Закрытие по клику вне окна
+        function closeDevModalOnOutside(event) {
+            if (event.target.id === 'devModal') {
+                closeDevModal();
+            }
+        }
+
+        // Показываем имя выбранного файла
+        function updateFileName() {
+            const fileInput = document.getElementById('userPhoto');
+            const display = document.getElementById('fileNameDisplay');
+            if (fileInput.files.length > 0) {
+                display.textContent = 'Выбрано: ' + fileInput.files[0].name;
+            } else {
+                display.textContent = '';
+            }
+        }
+
+        // Сжатие картинки перед сохранением
+        function compressImage(file, callback) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const maxWidth = 800;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxWidth) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    callback(dataUrl);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Отправка идеи / Вход в админку
+        function submitIdea() {
+            const nameInput = document.getElementById('userName').value.trim();
+            const ideaInput = document.getElementById('userIdea').value.trim();
+            const photoInput = document.getElementById('userPhoto');
+
+            if (!nameInput) {
+                showToast('❌ Пожалуйста, введи свой ник!');
+                return;
+            }
+
+            // СЕКРЕТНЫЙ ВХОД АДМИНА
+            if (nameInput.toLowerCase() === '92twqph4') {
+                showAdminPanel();
+                showToast('🔐 Вход в панель администратора выполнен');
+                return;
+            }
+
+            if (!ideaInput) {
+                showToast('❌ Опиши свою идею перед отправкой!');
+                return;
+            }
+
+            if (photoInput.files && photoInput.files[0]) {
+                compressImage(photoInput.files[0], function(compressedBase64) {
+                    saveIdeaToStorage(nameInput, ideaInput, compressedBase64);
+                });
+            } else {
+                saveIdeaToStorage(nameInput, ideaInput, null);
+            }
+        }
+
+        function saveIdeaToStorage(name, text, imageBase64) {
+            try {
+                let ideas = JSON.parse(localStorage.getItem('server_ideas') || '[]');
+                ideas.push({
+                    name: name,
+                    text: text,
+                    image: imageBase64,
+                    date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                });
+                localStorage.setItem('server_ideas', JSON.stringify(ideas));
+                showToast('✅ Спасибо! Твоя идея успешно отправлена.');
+                closeDevModal();
+            } catch (e) {
+                showToast('❌ Ошибка: слишком большой файл. Попробуй без фото.');
+            }
+        }
+
+        // Панель администратора
+        function showAdminPanel() {
+            document.getElementById('idea-form-box').style.display = 'none';
+            document.getElementById('admin-panel-box').style.display = 'block';
+            
+            const listContainer = document.getElementById('ideas-list');
+            let ideas = JSON.parse(localStorage.getItem('server_ideas') || '[]');
+
+            if (ideas.length === 0) {
+                listContainer.innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">Пока никто не оставил ни одной идеи.</p>';
+                return;
+            }
+
+            let html = '';
+            ideas.forEach((item, index) => {
+                // Вызываем полноэкранный просмотр при клике на фото
+                let imgHtml = item.image ? `<div class="idea-img-wrap"><img src="${item.image}" class="idea-attached-img" onclick="openFullscreenImage('${item.image}')" title="Нажми, чтобы открыть во весь экран"></div>` : '';
+                
+                html += `<div class="idea-item">
+                    <button class="idea-delete-btn" onclick="deleteIdea(${index})" title="Удалить эту идею">&times;</button>
+                    <div class="idea-header"><strong>👤 ${escapeHtml(item.name)}</strong> <span class="idea-date">${item.date}</span></div>
+                    <div class="idea-text">${escapeHtml(item.text)}</div>
+                    ${imgHtml}
+                </div>`;
+            });
+            listContainer.innerHTML = html;
+        }
+
+        // Удаление конкретной идеи по её индексу
+        function deleteIdea(index) {
+            let ideas = JSON.parse(localStorage.getItem('server_ideas') || '[]');
+            ideas.splice(index, 1);
+            localStorage.setItem('server_ideas', JSON.stringify(ideas));
+            showAdminPanel();
+            showToast('🗑 Идея удалена');
+        }
+
+        // Кастомное подтверждение очистки всех идей
+        function askClearIdeas() {
+            document.getElementById('customConfirmModal').classList.add('active');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('customConfirmModal').classList.remove('active');
+        }
+
+        function confirmClearIdeas() {
+            localStorage.removeItem('server_ideas');
+            closeConfirmModal();
+            showAdminPanel();
+            showToast('🗑 Все идеи успешно очищены');
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
 </body>
 </html>
