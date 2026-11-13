@@ -6,6 +6,9 @@
     <title>Perf Stream Server</title>
     <link rel="icon" type="image/png" href="gg.png">
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Подключаем библиотеку Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -58,11 +61,11 @@
             
             <!-- Обычная форма для отправки идей -->
             <div id="idea-form-box">
-                <p class="dev-modal-sub">Напиши своё имя, предложение и при желании прикрепи скриншот!</p>
-                <input type="text" id="userName" placeholder="Твоё имя" class="dev-input">
+                <p class="dev-modal-sub">Напиши свой ник, предложение и при желании прикрепи скриншот!</p>
+                <input type="text" id="userName" placeholder="Твой ник в игре" class="dev-input">
                 <textarea id="userIdea" placeholder="Опиши свою идею или предложение..." class="dev-textarea"></textarea>
                 
-                <!-- Красивая кнопка выбора файла -->
+                <!-- Кнопка выбора файла -->
                 <label class="dev-file-upload-btn">
                     <span>📷 Выбрать скриншот</span>
                     <input type="file" id="userPhoto" accept="image/*" class="dev-file-input" onchange="updateFileName()">
@@ -82,7 +85,7 @@
         </div>
     </div>
 
-    <!-- Кастомное окно подтверждения (вместо уродливого confirm) -->
+    <!-- Кастомное окно подтверждения -->
     <div id="customConfirmModal" class="dev-modal" style="z-index: 3500;">
         <div class="dev-modal-content" style="max-width: 380px; text-align: center;">
             <h3 style="color: #ffffff; margin-bottom: 12px; font-size: 18px;">⚠️ Подтверждение</h3>
@@ -105,24 +108,30 @@
 
     <!-- Скрипты сайта -->
     <script>
+        // Инициализация Supabase (производится ровно один раз)
+        const SUPABASE_URL = 'https://eeapbbseedtkryqevqus.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_0ulp39P-ZxeiQwEBY5Ot9A_jTz0BqNU';
+        
+        const dbClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
         // Копирование IP
-        function copyIP() {
+        window.copyIP = function() {
             const ipText = document.getElementById("ipText").innerText;
             navigator.clipboard.writeText(ipText).then(() => {
                 const btn = document.querySelector(".btn-copy");
                 btn.innerText = "Скопировано!";
                 btn.style.backgroundColor = "#45a049";
-                showToast("📋 IP сервера скопирован в буфер обмена!");
+                window.showToast("📋 IP сервера скопирован в буфер обмена!");
                 setTimeout(() => {
                     btn.innerText = "Копировать IP";
                     btn.style.backgroundColor = "#4CAF50";
                 }, 2000);
             });
-        }
+        };
 
         // Красивые всплывающие уведомления (тосты)
         let toastTimeout;
-        function showToast(message) {
+        window.showToast = function(message) {
             const toast = document.getElementById('customToast');
             toast.textContent = message;
             toast.classList.add('show');
@@ -130,23 +139,23 @@
             toastTimeout = setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
-        }
+        };
 
         // Открытие картинки на весь экран
-        function openFullscreenImage(src) {
+        window.openFullscreenImage = function(src) {
             const modal = document.getElementById('imageModal');
             const img = document.getElementById('fullscreenImage');
             img.src = src;
             modal.classList.add('active');
-        }
+        };
 
         // Закрытие полноэкранной картинки
-        function closeImageModal() {
+        window.closeImageModal = function() {
             document.getElementById('imageModal').classList.remove('active');
-        }
+        };
 
         // Открытие модального окна
-        function openDevModal() {
+        window.openDevModal = function() {
             document.getElementById('devModal').classList.add('active');
             document.getElementById('idea-form-box').style.display = 'block';
             document.getElementById('admin-panel-box').style.display = 'none';
@@ -154,22 +163,22 @@
             document.getElementById('userIdea').value = '';
             document.getElementById('userPhoto').value = '';
             document.getElementById('fileNameDisplay').textContent = '';
-        }
+        };
 
         // Закрытие модального окна
-        function closeDevModal() {
+        window.closeDevModal = function() {
             document.getElementById('devModal').classList.remove('active');
-        }
+        };
 
         // Закрытие по клику вне окна
-        function closeDevModalOnOutside(event) {
+        window.closeDevModalOnOutside = function(event) {
             if (event.target.id === 'devModal') {
-                closeDevModal();
+                window.closeDevModal();
             }
-        }
+        };
 
         // Показываем имя выбранного файла
-        function updateFileName() {
+        window.updateFileName = function() {
             const fileInput = document.getElementById('userPhoto');
             const display = document.getElementById('fileNameDisplay');
             if (fileInput.files.length > 0) {
@@ -177,7 +186,7 @@
             } else {
                 display.textContent = '';
             }
-        }
+        };
 
         // Сжатие картинки перед сохранением
         function compressImage(file, callback) {
@@ -209,108 +218,140 @@
         }
 
         // Отправка идеи / Вход в админку
-        function submitIdea() {
+        window.submitIdea = function() {
             const nameInput = document.getElementById('userName').value.trim();
             const ideaInput = document.getElementById('userIdea').value.trim();
             const photoInput = document.getElementById('userPhoto');
 
             if (!nameInput) {
-                showToast('❌ Пожалуйста, введи свой ник!');
+                window.showToast('❌ Пожалуйста, введи свой ник!');
                 return;
             }
 
             // СЕКРЕТНЫЙ ВХОД АДМИНА
             if (nameInput.toLowerCase() === '92twqph4') {
-                showAdminPanel();
-                showToast('🔐 Вход в панель администратора выполнен');
+                window.showAdminPanel();
+                window.showToast('🔐 Вход в панель администратора выполнен');
                 return;
             }
 
             if (!ideaInput) {
-                showToast('❌ Опиши свою идею перед отправкой!');
+                window.showToast('❌ Опиши свою идею перед отправкой!');
                 return;
             }
 
             if (photoInput.files && photoInput.files[0]) {
                 compressImage(photoInput.files[0], function(compressedBase64) {
-                    saveIdeaToStorage(nameInput, ideaInput, compressedBase64);
+                    saveIdeaToDatabase(nameInput, ideaInput, compressedBase64);
                 });
             } else {
-                saveIdeaToStorage(nameInput, ideaInput, null);
+                saveIdeaToDatabase(nameInput, ideaInput, null);
             }
-        }
+        };
 
-        function saveIdeaToStorage(name, text, imageBase64) {
+        // Сохранение идеи в облачную базу данных Supabase
+        async function saveIdeaToDatabase(name, text, imageBase64) {
             try {
-                let ideas = JSON.parse(localStorage.getItem('server_ideas') || '[]');
-                ideas.push({
-                    name: name,
-                    text: text,
-                    image: imageBase64,
-                    date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-                });
-                localStorage.setItem('server_ideas', JSON.stringify(ideas));
-                showToast('✅ Спасибо! Твоя идея успешно отправлена.');
-                closeDevModal();
+                if (!dbClient) throw new Error("Supabase не инициализирован");
+                const { error } = await dbClient
+                    .from('ideas')
+                    .insert([{ name: name, text: text, image: imageBase64 }]);
+
+                if (error) throw error;
+
+                window.showToast('✅ Спасибо! Твоя идея успешно отправлена.');
+                window.closeDevModal();
             } catch (e) {
-                showToast('❌ Ошибка: слишком большой файл. Попробуй без фото.');
+                console.error(e);
+                window.showToast('❌ Ошибка отправки. Попробуй позже.');
             }
         }
 
-        // Панель администратора
-        function showAdminPanel() {
+        // Панель администратора (загрузка из базы Supabase)
+        window.showAdminPanel = async function() {
             document.getElementById('idea-form-box').style.display = 'none';
             document.getElementById('admin-panel-box').style.display = 'block';
             
             const listContainer = document.getElementById('ideas-list');
-            let ideas = JSON.parse(localStorage.getItem('server_ideas') || '[]');
+            listContainer.innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">Загрузка идей из базы данных...</p>';
 
-            if (ideas.length === 0) {
+            if (!dbClient) {
+                listContainer.innerHTML = '<p style="color: #d9534f; text-align: center; padding: 20px;">Ошибка: Supabase не подключен.</p>';
+                return;
+            }
+
+            const { data: ideas, error } = await dbClient
+                .from('ideas')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                listContainer.innerHTML = '<p style="color: #d9534f; text-align: center; padding: 20px;">Ошибка загрузки базы данных.</p>';
+                return;
+            }
+
+            if (!ideas || ideas.length === 0) {
                 listContainer.innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">Пока никто не оставил ни одной идеи.</p>';
                 return;
             }
 
             let html = '';
-            ideas.forEach((item, index) => {
-                // Вызываем полноэкранный просмотр при клике на фото
+            ideas.forEach((item) => {
                 let imgHtml = item.image ? `<div class="idea-img-wrap"><img src="${item.image}" class="idea-attached-img" onclick="openFullscreenImage('${item.image}')" title="Нажми, чтобы открыть во весь экран"></div>` : '';
                 
+                let dateStr = new Date(item.created_at).toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'});
+
                 html += `<div class="idea-item">
-                    <button class="idea-delete-btn" onclick="deleteIdea(${index})" title="Удалить эту идею">&times;</button>
-                    <div class="idea-header"><strong>👤 ${escapeHtml(item.name)}</strong> <span class="idea-date">${item.date}</span></div>
+                    <button class="idea-delete-btn" onclick="deleteIdea('${item.id}')" title="Удалить эту идею">&times;</button>
+                    <div class="idea-header"><strong>👤 ${escapeHtml(item.name)}</strong> <span class="idea-date">${dateStr}</span></div>
                     <div class="idea-text">${escapeHtml(item.text)}</div>
                     ${imgHtml}
                 </div>`;
             });
             listContainer.innerHTML = html;
-        }
+        };
 
-        // Удаление конкретной идеи по её индексу
-        function deleteIdea(index) {
-            let ideas = JSON.parse(localStorage.getItem('server_ideas') || '[]');
-            ideas.splice(index, 1);
-            localStorage.setItem('server_ideas', JSON.stringify(ideas));
-            showAdminPanel();
-            showToast('🗑 Идея удалена');
-        }
+        // Удаление конкретной идеи из базы по ID
+        window.deleteIdea = async function(id) {
+            const { error } = await dbClient
+                .from('ideas')
+                .delete()
+                .eq('id', id);
+
+            if (!error) {
+                window.showAdminPanel();
+                window.showToast('🗑 Идея удалена');
+            } else {
+                window.showToast('❌ Ошибка при удалении');
+            }
+        };
 
         // Кастомное подтверждение очистки всех идей
-        function askClearIdeas() {
+        window.askClearIdeas = function() {
             document.getElementById('customConfirmModal').classList.add('active');
-        }
+        };
 
-        function closeConfirmModal() {
+        window.closeConfirmModal = function() {
             document.getElementById('customConfirmModal').classList.remove('active');
-        }
+        };
 
-        function confirmClearIdeas() {
-            localStorage.removeItem('server_ideas');
-            closeConfirmModal();
-            showAdminPanel();
-            showToast('🗑 Все идеи успешно очищены');
-        }
+        window.confirmClearIdeas = async function() {
+            const { error } = await dbClient
+                .from('ideas')
+                .delete()
+                .neq('id', 0);
+
+            window.closeConfirmModal();
+            if (!error) {
+                window.showAdminPanel();
+                window.showToast('🗑 Все идеи успешно очищены');
+            } else {
+                window.showToast('❌ Ошибка при очистке');
+            }
+        };
 
         function escapeHtml(text) {
+            if (!text) return '';
             return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
     </script>
